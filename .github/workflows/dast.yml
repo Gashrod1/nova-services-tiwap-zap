@@ -21,14 +21,14 @@ jobs:
       - name: Attendre TIWAP
         run: |
           for i in $(seq 1 36); do
-            docker compose exec -T zap curl -fsS -o /dev/null http://app:5000/ && exit 0
+            docker compose exec -T zap curl -kfsS -o /dev/null https://app:5000/ && exit 0
             echo "Attente ($i/36)..."; sleep 5
           done
           docker compose logs --tail=100 app; exit 1
       - name: Baseline scan
         run: >
           docker compose exec -T zap zap-baseline.py
-          -t http://app:5000 -m 2 -I
+          -t https://app:5000 -m 2 -I
           -r /zap/wrk/zap-report.html -J /zap/wrk/zap-report.json
       - name: Publier les rapports
         if: always()
