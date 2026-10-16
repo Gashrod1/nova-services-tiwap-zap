@@ -1,9 +1,9 @@
-version: "2"
 services:
   app:
     build: .
     ports:
-      - "5000:5000"
+      # Laboratoire : accessible uniquement depuis la machine locale
+      - "127.0.0.1:5000:5000"
     volumes:
       - .:/app
     depends_on:
@@ -16,5 +16,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
-    ports:
-      - "27017:27017"
+    # Pas de section ports : MongoDB reste joignable par "db" sur le réseau Compose uniquement
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    depends_on:
+      - app
+    volumes:
+      - ./reports:/zap/wrk/:rw
+    entrypoint: ["sleep", "infinity"]

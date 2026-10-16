@@ -1,0 +1,41 @@
+name: DAST ZAP
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dast_zap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Démarrer TIWAP et ZAP
+        run: |
+          mkdir -p reports && chmod 777 reports
+          docker compose up -d --build
+      - name: Attendre TIWAP
+        run: |
+          for i in $(seq 1 36); do
+            docker compose exec -T zap curl -fsS -o /dev/null http://app:5000/ && exit 0
+            echo "Attente ($i/36)..."; sleep 5
+          done
+          docker compose logs --tail=100 app; exit 1
+      - name: Baseline scan
+        run: >
+          docker compose exec -T zap zap-baseline.py
+          -t http://app:5000 -m 2 -I
+          -r /zap/wrk/zap-report.html -J /zap/wrk/zap-report.json
+      - name: Publier les rapports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-reports
+          path: reports/
+      - name: Arrêt
+        if: always()
+        run: docker compose down -v
