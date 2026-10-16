@@ -29,7 +29,7 @@ jobs:
         run: >
           docker compose exec -T zap zap-baseline.py
           -t https://app:5000 -m 2 -I
-          -r /zap/wrk/zap-report.html -J /zap/wrk/zap-report.json
+          -r zap-report.html -J zap-report.json
       - name: Publier les rapports
         if: always()
         uses: actions/upload-artifact@v4
