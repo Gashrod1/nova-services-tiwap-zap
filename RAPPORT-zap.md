@@ -366,7 +366,7 @@ pour ne pas supprimer de données sans vérification. La CI, elle, fait
 | # | Livrable demandé | Emplacement / statut |
 |---|---|---|
 | L1 | Fichier Compose modifié | `TIWAP/docker-compose.yml` (Partie 1) |
-| L2 | Capture prouvant que TIWAP fonctionne localement | **Capture à fournir par l'utilisateur** : navigateur sur `https://127.0.0.1:5000` (après acceptation du certificat auto-signé), page d'accueil ou de connexion TIWAP visible, barre d'adresse lisible. Si possible, ajouter dans la même capture ou une seconde la sortie de `docker compose ps` (services `app`, `db` et `zap` *Up*, port `127.0.0.1:5000->5000`). |
+| L2 | Capture prouvant que TIWAP fonctionne localement | ✅ [`captures/L2-tiwap-local.png`](captures/L2-tiwap-local.png) : page de connexion de TIWAP servie par le conteneur `app` sur `127.0.0.1:5000` (capture headless ; le certificat auto-signé `CN=TIWAP` ne correspond pas à `127.0.0.1`, la page a donc été relayée localement pour la capture). |
 | L3 | Rapport HTML et JSON de ZAP | `reports-ci/zap-report.html` et `.json` (run CI 38880746878) ; `TIWAP/reports/zap-report.html` et `.json` (scan local) |
 | L4 | Tableau de qualification (au moins 3 alertes réelles) | Partie 4, « Tableau de qualification » (5 lignes), avec le relevé détaillé 8.1 (Partie 3) |
 | L5 | Analyse expliquant pourquoi une alerte doit être vérifiée | Partie 4, « Pourquoi une alerte doit être vérifiée » (alerte 10099) |
